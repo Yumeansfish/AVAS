@@ -1,0 +1,18 @@
+{
+    "questions": [
+        {
+            "text": "Do you support vector machine?",
+            "options": [
+                "Yes",
+                "No"
+            ]
+        },
+        {
+            "text": "do you support vector machine?",
+            "options": [
+                "yes",
+                "no"
+            ]
+        }
+    ]
+}
