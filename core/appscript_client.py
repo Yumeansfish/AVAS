@@ -1,4 +1,5 @@
 import requests
+from typing import Optional
 from .config import SCRIPT_URL, SHEET_ID
 
 def call_appscript(
@@ -6,7 +7,7 @@ def call_appscript(
     survey_data: dict,
     video_name: str,
     video_url: str
-) -> str | None:
+) -> Optional[str]:
     payload = {
         "videoPath":  video_path,
         "surveyJson": survey_data,
@@ -24,3 +25,4 @@ def call_appscript(
     except requests.RequestException as e:
         print(f"❌ unexpected call Apps Script : {e}")
     return None
+

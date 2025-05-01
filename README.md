@@ -1,7 +1,7 @@
 # AVAS
 
 ## Project Overview
-The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in a specified directory. Once a file has finished writing, non-MP4 videos are automatically transcoded to MP4 (H.264 + AAC, faststart). The resulting file is uploaded to AWS S3, a Google Apps Script endpoint is called to update or create a remote page, and a notification is sent. A GUI callback can be used to refresh the front end in real time.
+The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in a specified directory. Once a file has finished writing, non-MP4 videos are automatically transcoded to MP4 (H.264 + AAC, faststart). The resulting file is uploaded to AWS S3, a Google Apps Script endpoint is called to update or create a remote page, and a notification is sent. 
 
 ## Key Features
 - Automatic detection of new `.mov`, `.avi`, and `.mp4` files  
@@ -13,8 +13,7 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 - GUI callback interface for live front-end updates  
 
 ## Environment & Dependencies
-- **Python:** 3.7 or higher  
-- **System:** `ffmpeg` installed and available on `PATH`  
+- **Python:** 3.8  
 - **Python packages:**  
     - `watchdog`  
     - `boto3`  
@@ -30,13 +29,26 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-1. Create or edit `core/config.py` (or set environment variables):  
-   - `SURVEY_JSON_PATH`: Local path to the survey JSON file  
-   - `S3_BUCKET_NAME`: Target AWS S3 bucket name  
-2. Ensure AWS credentials are configured via environment variables or `~/.aws/credentials`:  
-   - `AWS_ACCESS_KEY_ID`  
-   - `AWS_SECRET_ACCESS_KEY`  
-3. Configure Google Apps Script settings (script ID, API key, etc.) in `core/config.py` or via environment variables.
+1. install GUI dependencies
+```
+sudo apt update
+sudo apt install -y python3-tk
+```
+2. Configure AWS
+```
+aws configure
+```
+configuration steps:
+`AWS_ACCESS_KEY_ID`  (in file)
+`AWS_SECRET_ACCESS_KEY`  (in file)
+eu-north-1
+json
+3. run
+```
+python3 -m gui.monitor_gui
+```
+
+
 
 ## Usage Instructions
 Just launch the GUI and it will start watching for new videos automatically:  
@@ -47,26 +59,27 @@ python3 -m gui.monitor_gui
 ## Directory Structure
 ```text
 <repository_root>/
-    core/
-        __init__.py
-        appscript_client.py
-        config.py
-        handler.py
-        main.py
-        monitor.py
-        notifier.py
-        s3_uploader.py
-    data/
-        …
-    gui/
-        __init__.py
-        monitor_gui.py
-        survey_gui.py
-    .gitignore
-    client_secret.json
-    credentials.json
-    token.json
-    README.md
+├── core/
+│   ├── __init__.py
+│   ├── appscript_client.py
+│   ├── config.py
+│   ├── handler.py
+│   ├── main.py
+│   ├── monitor.py
+│   ├── notifier.py
+│   └── s3_uploader.py
+├── data/
+│   └── … 
+├── gui/
+│   ├── __init__.py
+│   ├── monitor_gui.py
+│   └── survey_gui.py
+├── .gitignore
+├── client_secret.json
+├── credentials.json
+├── token.json
+└── README.md
+
 ```
 
 
