@@ -55,9 +55,9 @@ def __init__(self, callback, wait_timeout=300, wait_interval=1, batch_interval=1
 ```bash
 python3 -m gui.monitor_gui
 ```
--finish the survey configuration in the GUI 
--choose the target directory in the GUI
--click start monitoring
+- finish the survey configuration in the GUI 
+- choose the target directory in the GUI
+- click start monitoring
 
 
 ## Directory Structure
