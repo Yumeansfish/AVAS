@@ -9,8 +9,8 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 - Skip handling of already–transcoded MP4 files to prevent duplication  
 - Upload to a configurable S3 bucket  
 - Integration with Google Apps Script for remote page updates  
-- Notification support (e.g., email, Slack)  
-- GUI callback interface for live front-end updates  
+- Notification by email
+- Implement a queue in handler so that the videos entering in the folder in a given interval will be handled together
 
 ## Environment & Dependencies
 - **Python:** 3.8  
@@ -51,10 +51,14 @@ def __init__(self, callback, wait_timeout=300, wait_interval=1, batch_interval=1
 
 
 ## Usage Instructions
-Just launch the GUI and set the directory of the folder and then click start monitoring:
+-launch the GUI
 ```bash
 python3 -m gui.monitor_gui
 ```
+-finish the survey configuration in the GUI 
+-choose the target directory in the GUI
+-click start monitoring
+
 
 ## Directory Structure
 ```text
