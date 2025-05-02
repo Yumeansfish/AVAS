@@ -38,20 +38,20 @@ sudo apt install -y python3-tk
 ```
 aws configure
 ```
-configuration steps:
-`AWS_ACCESS_KEY_ID`  (in file)
-`AWS_SECRET_ACCESS_KEY`  (in file)
-eu-north-1
-json
-3. run
+- configuration steps:
+- `AWS_ACCESS_KEY_ID`  (in file)
+- `AWS_SECRET_ACCESS_KEY`  (in file)
+- eu-north-1
+- json
+3. set the batch_interval in the following code in handler.py
 ```
-python3 -m gui.monitor_gui
+def __init__(self, callback, wait_timeout=300, wait_interval=1, batch_interval=10):
 ```
 
 
 
 ## Usage Instructions
-Just launch the GUI and it will start watching for new videos automatically:  
+Just launch the GUI and set the directory of the folder and then click start monitoring:
 ```bash
 python3 -m gui.monitor_gui
 ```
