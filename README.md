@@ -17,11 +17,23 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 - **Python packages:**  
     - `watchdog`  
     - `boto3`  
-    - `requests`  
-    - Standard library: `json`, `subprocess`, etc.  
+    - `requests`
+ 
+## App script
+- This project use App script to generate the pages including videos and surveys
+- and collect the result of surveys to Google sheet
+- to clear the properties to avoid achieve 500KB limit of app script
+- run this code in app script code.gs
+```
+function clearAllPages() {
+  PropertiesService.getScriptProperties().deleteAllProperties();
+}
+```
+
+
 
 ## Installation & Configuration
-```bash
+```
 git clone <repository_url>
 cd <repository_folder>
 python3 -m venv venv
