@@ -19,6 +19,31 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
     - `boto3`  
     - `requests`
  
+## ActivityWatch
+-The default ActivityWatch web UI does **not** support parsing URLs to extract specific timestamps. It only supports:
+
+- Showing the most recent timespan of activity  
+- Jumping to a specific day  
+
+- Therefore, I forked the [aw-webui](https://github.com/Yumeansfish/aw-webui) repository 
+- and added front-end logic to parse `start` and `end` parameters from the URL, 
+- allowing the UI to jump -to an exact time range. 
+- This makes it possible to link videos on the final webpage to their corresponding timeline URLs.
+
+- To implement it,please:
+```
+git clone https://github.com/Yumeansfish/aw-webui.git
+aw-webui % npm npm install
+aw-webui % npm run build
+cp -r /Users/usi/Desktop/aw-webui/dist/* \     //change this to the real path
+     /Applications/ActivityWatch.app/Contents/Resources/aw_server/static/  //change this to the real path
+osascript -e 'tell application "ActivityWatch" to quit'
+open /Applications/ActivityWatch.app       //reopen,also change this to the real path
+```
+- after this,it should be okay when open the url in form like:
+- http://localhost:5600/#/timeline?start=2025-05-11T15%3A10%3A00&end=2025-05-11T15%3A30%3A00
+
+ 
 ## App script
 - This project use App script to generate the pages including videos and surveys
 - and collect the result of surveys to Google sheet
@@ -97,5 +122,7 @@ python3 -m gui.monitor_gui
 └── README.md
 
 ```
+
+
 
 

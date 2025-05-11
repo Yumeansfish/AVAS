@@ -1,26 +1,21 @@
-import argparse
-from .monitor import MonitorCore
+import signal
+import sys
+import time
 
-
-def gui_callback(video_name: str, page_url: str = None):
-    msg = f"Processing complete: {video_name}"
-    if page_url:
-        msg += f" -> {page_url}"
-    print(msg)
-
+from core.config import WATCH_DIR
+from core.monitor import MonitorCore
 
 def main():
-    parser = argparse.ArgumentParser(description="AVAS video monitoring entry script")
-    parser.add_argument(
-        "--dir", required=True,
-        help="Path to the directory to monitor for video files"
-    )
-    args = parser.parse_args()
-
     core = MonitorCore()
-    core.start(args.dir, gui_callback)
-    print("Monitoring in progress. Press Ctrl+C to stop.")
-
+    core.start(str(WATCH_DIR), callback=None) 
+    def handle(sig, frame):
+        print("stop monitoring")
+        core.stop()
+        sys.exit(0)
+    signal.signal(signal.SIGINT, handle)
+    while True:
+        time.sleep(1)
 
 if __name__ == "__main__":
     main()
+

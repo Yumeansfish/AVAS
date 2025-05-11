@@ -35,9 +35,11 @@ def notify(video_name: str, page_url: str) -> None:
 
 def notify_batch(video_names: List[str], video_urls: List[str]) -> None:
     subject = "[AVAS] Batch Video Upload Complete"
-    # wrap each URL in <…> 
-    lines = [f"{name}: <{url}>" for name, url in zip(video_names, video_urls)]
-    body = "The following videos have been processed and are available:\n\n" + "\n".join(lines)
+    lines = [f"<{url}>" for url in video_urls]
+    body  = (
+        "The following videos have been processed and are available:\n\n"
+        + "\n".join(lines)
+    )
     send_notification_email(RECIPIENT_EMAIL, subject, body)
     print(body)
 

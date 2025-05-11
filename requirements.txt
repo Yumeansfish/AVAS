@@ -4,3 +4,11 @@ requests>=2.25.0
 google-auth>=2.0.0
 google-auth-oauthlib>=0.4.0
 google-api-python-client>=2.0.0
+
+
+
+###change
+1.delete gui folder and all the gui.py
+2.move the batch_interval setting from handler.py to config.py
+3.merge all the videos files in the same webpage and only call appscript once
+
