@@ -1,5 +1,12 @@
 # AVAS
 
+## Main Change in new version
+- delete gui folder and all the gui.py
+- move the batch_interval setting from handler.py to config.py
+- now every setting is finished in config.py
+- merge all the videos files in the same webpage and only call appscript once
+- add logic in appscript to handle the localhost url in the webpage
+
 ## Project Overview
 The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in a specified directory. Once a file has finished writing, non-MP4 videos are automatically transcoded to MP4 (H.264 + AAC, faststart). The resulting file is uploaded to AWS S3, a Google Apps Script endpoint is called to update or create a remote page, and a notification is sent. 
 
@@ -55,6 +62,8 @@ function clearAllPages() {
 }
 ```
 
+## Amazin S3 
+- Coming soon
 
 
 ## Installation & Configuration
@@ -90,7 +99,7 @@ def __init__(self, callback, wait_timeout=300, wait_interval=1, batch_interval=1
 ## Usage Instructions
 -launch the GUI
 ```bash
-python3 -m gui.monitor_gui
+python3 -m core.main
 ```
 - finish the survey configuration in the GUI 
 - choose the target directory in the GUI

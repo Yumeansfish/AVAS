@@ -16,20 +16,20 @@ class VideoHandler(FileSystemEventHandler):
     def __init__(self, callback, wait_timeout=300, wait_interval=1, batch_interval=None):
         super().__init__()
         self.batch_interval = batch_interval if batch_interval is not None else BATCH_INTERVAL
-        self.callback = callback
-        self.wait_timeout = wait_timeout
-        self.wait_interval = wait_interval
+        self.callback       = callback
+        self.wait_timeout   = wait_timeout
+        self.wait_interval  = wait_interval
 
-        self._skip = set()
-        self._queue = queue.Queue()
-        self._timer = None
-        self._lock = threading.Lock()
+        self._skip   = set()
+        self._queue  = queue.Queue()
+        self._timer  = None
+        self._lock   = threading.Lock()
 
     def on_created(self, event):
         if event.is_directory:
             return
         path = event.src_path
-        ext = os.path.splitext(path)[1].lower()
+        ext  = os.path.splitext(path)[1].lower()
         if ext not in ('.mov', '.avi', '.mp4'):
             return
 
@@ -37,24 +37,27 @@ class VideoHandler(FileSystemEventHandler):
             if path in self._skip:
                 self._skip.remove(path)
                 return
+            
+            
             self._queue.put(path)
-            if self._timer:
-                self._timer.cancel()
-            self._timer = threading.Timer(self.batch_interval, self._run_batch)
-            self._timer.start()
+            
+
+            if self._timer is None:
+                self._timer = threading.Timer(self.batch_interval, self._run_batch)
+                self._timer.start()
 
     def _run_batch(self):
         with self._lock:
-            self._timer = None
+            self._timer = None  
 
         items = []
         while not self._queue.empty():
             items.append(self._queue.get())
 
-        unique_items = list(dict.fromkeys(items))
-        if not unique_items:
+        if not items:
             return
 
+        # survey
         survey_data = {}
         if os.path.exists(SURVEY_JSON_PATH):
             try:
@@ -64,18 +67,19 @@ class VideoHandler(FileSystemEventHandler):
                 pass
 
         video_names = []
-        video_urls = []
+        video_urls  = []
         video_times = []
 
-        for path in unique_items:
+        for path in set(items):
             if not self._wait_for_stable_file(path):
                 continue
 
+            # get the time of the orginal video
             ts = os.path.getmtime(path)
-            dt_utc = datetime.datetime.utcfromtimestamp(ts)
-            iso_ts = dt_utc.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+            iso_ts = datetime.datetime.fromtimestamp(ts).isoformat()
             video_times.append(iso_ts)
 
+            # convert to .mp4
             ext = os.path.splitext(path)[1].lower()
             if ext != '.mp4':
                 mp4_path = os.path.splitext(path)[0] + '.mp4'
@@ -103,11 +107,11 @@ class VideoHandler(FileSystemEventHandler):
             return
 
         page_url = call_appscript_batch(
-            video_paths=unique_items,
-            video_names=video_names,
-            video_urls=video_urls,
-            video_times=video_times,
-            survey_data=survey_data
+            video_paths  = list(set(items)),
+            video_names  = video_names,
+            video_urls   = video_urls,
+            video_times  = video_times,   
+            survey_data  = survey_data
         ) or video_urls[0]
 
         notify_batch(video_names, [page_url])
@@ -118,7 +122,7 @@ class VideoHandler(FileSystemEventHandler):
 
     def _wait_for_stable_file(self, path):
         start = time.time()
-        last_size = -1
+        last_size    = -1
         stable_count = 0
 
         while time.time() - start < self.wait_timeout:
@@ -132,12 +136,13 @@ class VideoHandler(FileSystemEventHandler):
                 if stable_count >= 2:
                     return True
             else:
-                last_size = size
+                last_size    = size
                 stable_count = 0
 
             time.sleep(self.wait_interval)
 
         return False
+
 
 
 
