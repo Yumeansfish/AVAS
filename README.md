@@ -63,7 +63,62 @@ function clearAllPages() {
 ```
 
 ## Amazon S3 
-- Coming soon
+- Go to website https://aws.amazon.com/cn/s3/
+- click sign up and finish the signing up
+- sign in and search S3
+- create a new bucket
+- go to permission of the bucket
+- finish the storing strategy of the bucket
+```
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowPublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::avas/*"
+        }
+    ]
+}
+```
+- then need to add the permission to python uploading
+- search IAM
+- create a new user
+- finish the strategy settings
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:PutObjectAcl"     
+      ],
+      "Resource": "arn:aws:s3:::avas/*"
+    }
+  ]
+}
+```
+- dowload the .csv which contains the access key and secret key
+- in AVAS,call terminal end enter:
+```
+aws configure
+```
+- then finish the configuration steps:
+- configuration steps:
+- `AWS_ACCESS_KEY_ID`  (in file)
+- `AWS_SECRET_ACCESS_KEY`  (in file)
+- eu-north-1
+- json
+
+## Google access key
+- coming soon
+
+
+
 
 
 ## Installation & Configuration
@@ -74,25 +129,7 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
-
-1. install GUI dependencies
-```
-sudo apt update
-sudo apt install -y python3-tk
-```
-2. Configure AWS
-```
-aws configure
-```
-- configuration steps:
-- `AWS_ACCESS_KEY_ID`  (in file)
-- `AWS_SECRET_ACCESS_KEY`  (in file)
-- eu-north-1
-- json
-3. set the batch_interval in the following code in handler.py
-```
-def __init__(self, callback, wait_timeout=300, wait_interval=1, batch_interval=10):
-```
+- set all the configuration in config.py
 
 
 
@@ -101,9 +138,8 @@ def __init__(self, callback, wait_timeout=300, wait_interval=1, batch_interval=1
 ```bash
 python3 -m core.main
 ```
-- finish the survey configuration in the GUI 
-- choose the target directory in the GUI
-- click start monitoring
+- then it will start monitor the target folder automatically
+
 
 
 ## Directory Structure
