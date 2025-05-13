@@ -62,7 +62,7 @@ function clearAllPages() {
 }
 ```
 
-## Amazin S3 
+## Amazon S3 
 - Coming soon
 
 
