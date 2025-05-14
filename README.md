@@ -27,7 +27,7 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
     - `requests`
  
 ## ActivityWatch
--The default ActivityWatch web UI does **not** support parsing URLs to extract specific timestamps. It only supports:
+- The default ActivityWatch web UI does **not** support parsing URLs to extract specific timestamps. It only supports:
 
 - Showing the most recent timespan of activity  
 - Jumping to a specific day  
@@ -54,6 +54,7 @@ nvm use 23.11.0
 ```
 aw-webui % npm install
 aw-webui % npm run build
+```
 - then apply the new dist to the activitywatch:
 ```
 cp -r /home/trustme/aw-webui/dist/. /home/trustme/activitywatch/aw-server/aw_server/static/
