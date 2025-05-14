@@ -38,17 +38,33 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 - This makes it possible to link videos on the final webpage to their corresponding timeline URLs.
 
 - To implement it,please:
+
 ```
 git clone https://github.com/Yumeansfish/aw-webui.git
-aw-webui % npm npm install
-aw-webui % npm run build
-cp -r /Users/usi/Desktop/aw-webui/dist/* \     //change this to the real path
-     /Applications/ActivityWatch.app/Contents/Resources/aw_server/static/  //change this to the real path
-osascript -e 'tell application "ActivityWatch" to quit'
-open /Applications/ActivityWatch.app       //reopen,also change this to the real path
 ```
-- after this,it should be okay when open the url in form like:
+- update Node to make sure that npm run build can executed successfully
+- a example installing way :
+```
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+source ~/.bashrc   
+nvm install 23.11.0
+nvm use 23.11.0
+```
+- then:
+```
+aw-webui % npm install
+aw-webui % npm run build
+- then apply the new dist to the activitywatch:
+```
+cp -r /home/trustme/aw-webui/dist/. /home/trustme/activitywatch/aw-server/aw_server/static/
+//check whether it's the right path in computer
+pkill -f activitywatch 
+/home/trustme/activitywatch/aw-server/aw-server &   //restart
+```
+- after this, use this link to test whether its work :
 - http://localhost:5600/#/timeline?start=2025-05-11T15%3A10%3A00&end=2025-05-11T15%3A30%3A00
+- the left side of the timeline will start from 05-11 15:10
+- the right side of the timeline will end at 05-11 15:30
 
  
 ## App script
