@@ -2,6 +2,7 @@ import requests
 from typing import Optional, List
 from .config import SCRIPT_URL, SHEET_ID
 
+#one video case
 def call_appscript(
     video_path: str,
     survey_data: dict,
@@ -16,6 +17,8 @@ def call_appscript(
         survey_data  = survey_data
     )
 
+
+#batch case
 def call_appscript_batch(
     video_paths: List[str],
     video_names: List[str],
@@ -23,6 +26,19 @@ def call_appscript_batch(
     video_times: List[str],
     survey_data: dict
 ) -> Optional[str]:
+    """
+    call the appscript to generate the pages
+
+    input:
+        video_paths (List[str]): List of local file paths for each video
+        video_names (List[str]): List of the video file names 
+        video_urls (List[str]): List of Amazon S3 links for each video
+        video_times (List[str]): List of ISO timestamps for each video
+        survey_data (dict): survey JSON to embed in the page
+
+    output:
+        Optional[str]: The generated page URL, or None on failure.
+    """
     payload = {
         "videoPaths":  video_paths,
         "videoNames":  video_names,

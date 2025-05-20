@@ -13,6 +13,13 @@ from .notifier import notify_batch
 from .config import SURVEY_JSON_PATH, S3_BUCKET_NAME, BATCH_INTERVAL
 
 class VideoHandler(FileSystemEventHandler):
+    """
+    1. Waits for each file to finish writing.
+    2. Converts non-.mp4 files to .mp4 via ffmpeg.
+    3. Uploads the resulting files to S3.
+    4. Calls an App Script to generate a page URL.
+    5. Sends a notification and invokes a user callback.
+    """    
     def __init__(self, callback, wait_timeout=300, wait_interval=1, batch_interval=None):
         super().__init__()
         self.batch_interval = batch_interval if batch_interval is not None else BATCH_INTERVAL
@@ -26,6 +33,14 @@ class VideoHandler(FileSystemEventHandler):
         self._lock   = threading.Lock()
 
     def on_created(self, event):
+        """
+        Handler for "created" events. 
+        
+        Behavior:
+        1.Ignores non-video extensions
+        2.Skips any path in self._skip (for example, a .mp4 just converted by the original video file)
+        3.if no timer is active, starts a timer in batch_interval times.
+        """
         if event.is_directory:
             return
         path = event.src_path
@@ -47,6 +62,24 @@ class VideoHandler(FileSystemEventHandler):
                 self._timer.start()
 
     def _run_batch(self):
+        """
+        batch all the videos in the queue after the timer finish
+
+        Steps:
+        1. Dequeues all file
+        2. For each one:
+           a. Waits for the file to stabilize (_wait_for_stable_file).
+           b. Records its last-modified timestamp.
+           c. Converts to .mp4 (marking the new .mp4 in self._skip).
+           d. Uploads the .mp4 to S3 via upload_to_s3().
+        3. Calls call_appscript_batch() with video metadata to get a page URL.
+        4. Sends notifications (notify_batch) and invokes the callback.
+        
+        
+        note:meaning of paramaters (for example,video_name...)are in docstring of function
+        call_appscript_batch.
+        """
+        
         with self._lock:
             self._timer = None  
 
@@ -121,6 +154,11 @@ class VideoHandler(FileSystemEventHandler):
             pass
 
     def _wait_for_stable_file(self, path):
+        """
+        - get size of the file in every wait_interval seconds.
+        - Considers the file stable after two identical size readings.
+        - Aborts and returns False if wait_timeout is exceeded.
+        """
         start = time.time()
         last_size    = -1
         stable_count = 0
