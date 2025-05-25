@@ -1,5 +1,9 @@
 # AVAS
 
+## Change in new version May 25
+- to avoid re-submission,every generated pages will be destroyed after sumbit result
+- in everyday 1 am,delete all the generated pages existed over 7 days(even it was'not been submitted)
+
 ## Main Change in new version
 - delete gui folder and all the gui.py
 - move the batch_interval setting from handler.py to config.py
