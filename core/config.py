@@ -38,7 +38,7 @@ SHEET_ID = "1X8YgETui7itJbCxwiRsiiT1ALqtGUV6ntaJAKQpmgxM"
 # Apps Script URL
 SCRIPT_URL = (
     "https://script.google.com/macros/s/"
-    "AKfycbwTlaR8n5U8hYD3leZYtEPxT9cdnJoZT1H-UOS3KNPuxMPklePhZhJU1gXtH2Cfc-8o/exec"
+    "AKfycbx1cXRC7ReFfs6U_rh51qZ-3CcRS9h3DSpytKQfkOlrSxUQmOIM6cMyrfGD8foRqc_c/exec"
 )
 
 # Amazon S3 setting
