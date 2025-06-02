@@ -1,10 +1,16 @@
 # AVAS
 
+## Change in new version Jun3
+- Packaged WebUI deployment into init_aw_webui.py
+- Move all configuration to config.py(includes Google sheet,AWS configuration ...)
+- Made sensitive information into environment variables, and use init_env.py to help users build .env
+- Added automatic deletion of related videos after questionnaire submission (refers to deleting corresponding videos on S3)
+
 ## Change in new version May 25
 - to avoid re-submission,every generated pages will be destroyed after sumbit result
 - in everyday 1 am,delete all the generated pages existed over 7 days(even it was'not been submitted)
 
-## Main Change in new version
+## Change in new version May 12
 - delete gui folder and all the gui.py
 - move the batch_interval setting from handler.py to config.py
 - now every setting is finished in config.py
@@ -25,12 +31,69 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 
 ## Environment & Dependencies
 - **Python:** 3.8  
-- **Python packages:**  
-    - `watchdog`  
-    - `boto3`  
-    - `requests`
+
+## Amazon S3 sign up and bucket creation
+- Go to website https://aws.amazon.com/cn/s3/
+- click sign up and finish the signing up
+- sign in and search S3
+- create a new bucket
+- go to permission of the bucket
+- finish the storing strategy of the bucket,a example can be:
+```
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowPublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::avas/*"
+        }
+    ]
+}
+```
+- then need to add the permission to python uploading
+- search IAM
+- create a new user
+- finish the strategy settings,a example can be :
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:PutObjectAcl"     
+      ],
+      "Resource": "arn:aws:s3:::avas/*"
+    }
+  ]
+}
+```
+- dowload the .csv which contains the access key and secret key
+
+
+## Installation & Configuration
+```
+git clone <repository_url>
+cd <repository_folder>
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python3 init_aw_webui.py #Do this step in terminal instead of IDE
+python3 init_env.py #Do this step in terminal instead of IDE
+```
+- change/set other non-sensitive configuration in config.py
+
+## Usage Instructions
+```bash
+python3 -m core.main
+```
+- then it will start monitor the target folder automatically
  
-## ActivityWatch
+## ActivityWatch(This part in only for back-up operation when init_aw_webui.py fail)
 - The default ActivityWatch web UI does **not** support parsing URLs to extract specific timestamps. It only supports:
 
 - Showing the most recent timespan of activity  
@@ -71,97 +134,6 @@ pkill -f activitywatch
 - the left side of the timeline will start from 05-11 15:10
 - the right side of the timeline will end at 05-11 15:30
 
- 
-## App script
-- This project use App script to generate the pages including videos and surveys
-- and collect the result of surveys to Google sheet
-- to clear the properties to avoid achieve 500KB limit of app script
-- run this code in app script code.gs
-```
-function clearAllPages() {
-  PropertiesService.getScriptProperties().deleteAllProperties();
-}
-```
-
-## Amazon S3 
-- Go to website https://aws.amazon.com/cn/s3/
-- click sign up and finish the signing up
-- sign in and search S3
-- create a new bucket
-- go to permission of the bucket
-- finish the storing strategy of the bucket
-```
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "AllowPublicReadGetObject",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::avas/*"
-        }
-    ]
-}
-```
-- then need to add the permission to python uploading
-- search IAM
-- create a new user
-- finish the strategy settings
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:PutObject",
-        "s3:PutObjectAcl"     
-      ],
-      "Resource": "arn:aws:s3:::avas/*"
-    }
-  ]
-}
-```
-- dowload the .csv which contains the access key and secret key
-- in AVAS,call terminal end enter:
-```
-aws configure
-```
-- then finish the configuration steps:
-- configuration steps:
-- `AWS_ACCESS_KEY_ID`  (in file)
-- `AWS_SECRET_ACCESS_KEY`  (in file)
-- eu-north-1
-- json
-
-## Google access key
-- coming soon
-
-
-
-
-
-## Installation & Configuration
-```
-git clone <repository_url>
-cd <repository_folder>
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-- set all the configuration in config.py
-
-
-
-## Usage Instructions
--launch the GUI
-```bash
-python3 -m core.main
-```
-- then it will start monitor the target folder automatically
-
-
 
 ## Directory Structure
 ```text
@@ -186,7 +158,6 @@ python3 -m core.main
 ├── credentials.json
 ├── token.json
 └── README.md
-
 ```
 
 
