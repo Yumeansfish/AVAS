@@ -13,6 +13,12 @@ after the timer finished, they will be handled together
 #BTACH_INTERVAL setting
 BATCH_INTERVAL = int(os.environ.get("BATCH_INTERVAL", 10))
 
+# 
+AWS_ACCESS_KEY_ID     = "AKIAQNU7NENXYW7VODMB"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_REGION            = "eu-north-1"       
+S3_BUCKET_NAME        = "avas"                
+
 
 #target folder setting
 WATCH_DIR = Path(
@@ -38,7 +44,7 @@ SHEET_ID = "1X8YgETui7itJbCxwiRsiiT1ALqtGUV6ntaJAKQpmgxM"
 # Apps Script URL
 SCRIPT_URL = (
     "https://script.google.com/macros/s/"
-    "AKfycbx1cXRC7ReFfs6U_rh51qZ-3CcRS9h3DSpytKQfkOlrSxUQmOIM6cMyrfGD8foRqc_c/exec"
+    "AKfycbweZPp2UtL4ShCp4pnAb_zfSbXhwpFsqUdS4ruv5B_ZhoW_JgRZEmO3fyrYwl0K45U/exec"
 )
 
 # Amazon S3 setting
