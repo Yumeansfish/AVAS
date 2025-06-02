@@ -76,9 +76,19 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 
 
 ## Installation & Configuration
+- The basic steps includes:
+- 0.sign up in AWS and create bucket(see Amazon S3 sign up and bucket creation)
+- 1.install requirements.txt
+- 2.run init_aw_webui.py 
+- 3.aws configure
+- 4.run init_env.py 
+- in this stage , I divide 1,2,3,4 to test its functionality.
+- when everything can be finished well , they can be merged in one .py file 
+
 ```
 git clone <repository_url>
 cd <repository_folder>
+aws configure
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
