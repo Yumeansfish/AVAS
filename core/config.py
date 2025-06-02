@@ -13,13 +13,12 @@ after the timer finished, they will be handled together
 #BTACH_INTERVAL setting
 BATCH_INTERVAL = int(os.environ.get("BATCH_INTERVAL", 10))
 
-# 
-AWS_ACCESS_KEY_ID     = "AKIAQNU7NENXYW7VODMB"
-AWS_SECRET_ACCESS_KEY = "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"
-AWS_REGION            = "eu-north-1"       
-S3_BUCKET_NAME        = "avas"                
-
-
+#AWS setting
+AWS_ACCESS_KEY_ID     = os.environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+AWS_REGION            = os.environ.get("AWS_REGION", "eu-north-1")
+S3_BUCKET_NAME        = os.environ.get("S3_BUCKET_NAME", "")
+            
 #target folder setting
 WATCH_DIR = Path(
     os.environ.get(
@@ -38,25 +37,23 @@ SURVEY_JSON_PATH = Path(
 )
 SURVEY_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-# Google Sheet setting
-SHEET_ID = "1X8YgETui7itJbCxwiRsiiT1ALqtGUV6ntaJAKQpmgxM"
-
 # Apps Script URL
 SCRIPT_URL = (
     "https://script.google.com/macros/s/"
     "AKfycbweZPp2UtL4ShCp4pnAb_zfSbXhwpFsqUdS4ruv5B_ZhoW_JgRZEmO3fyrYwl0K45U/exec"
 )
 
-# Amazon S3 setting
-S3_BUCKET_NAME = "avas"
+# ─── Google Sheet setting ───
+SHEET_ID = os.environ.get("SHEET_ID", "")
 
-# notification setting
-RECIPIENT_EMAIL = "yuchengyu0507@outlook.com"
-SMTP_SERVER    = "smtp.gmail.com"
-SMTP_PORT      = 587
-SMTP_USERNAME  = "nightnight2024@gmail.com"
-SMTP_PASSWORD  = "cjxa vnlh uhyo hfmg"
-FROM_EMAIL     = "nightnight2024+no-reply@gmail.com"
+# ─── notification setting ───
+RECIPIENT_EMAIL = os.environ.get("RECIPIENT_EMAIL", "")
+SMTP_SERVER     = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+SMTP_PORT       = int(os.environ.get("SMTP_PORT", "587"))
+SMTP_USERNAME   = os.environ.get("SMTP_USERNAME", "")
+SMTP_PASSWORD   = os.environ.get("SMTP_PASSWORD", "")
+FROM_EMAIL      = os.environ.get("FROM_EMAIL", "")
+
 
 
 
