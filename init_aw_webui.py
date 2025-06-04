@@ -226,9 +226,14 @@ def main():
         aw_app = Path("/Applications/ActivityWatch.app")
         if aw_app.exists():
             print(">>> Starting ActivityWatch...")
-            subprocess.Popen(["open", "-a", "ActivityWatch"], 
-                           stdout=subprocess.DEVNULL, 
-                           stderr=subprocess.DEVNULL)
+            subprocess.Popen(
+                ["open", "-a", "ActivityWatch"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+    elif platform.system() == "Linux":
+        print(">>> Starting ActivityWatch server on Linux...")
+        run("/home/trustme/activitywatch/aw-server/aw-server &")
 
     print("\naw-webui has been successfully deployed to ActivityWatch static directory.")
     print("🌐 Visit http://localhost:5600 to see the updated interface")
@@ -236,6 +241,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
 
 
 

@@ -35,9 +35,12 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 ## Amazon S3 sign up and bucket creation
 - Go to website https://aws.amazon.com/cn/s3/
 - click sign up and finish the signing up
+
+- S3 part
 - sign in and search S3
 - create a new bucket
 - go to permission of the bucket
+- to make sure appscript can get the link of the video
 - finish the storing strategy of the bucket,a example can be:
 ```
   {
@@ -53,10 +56,12 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
     ]
 }
 ```
-- then need to add the permission to python uploading
+
+- IAM part
 - search IAM
 - create a new user
-- finish the strategy settings,a example can be :
+- finish the strategy settings to make sure python can upload videos
+- a example can be :
 ```
 {
   "Version": "2012-10-17",
