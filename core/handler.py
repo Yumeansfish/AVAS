@@ -5,6 +5,7 @@ import subprocess
 import threading
 import queue
 import datetime
+import re
 from watchdog.events import FileSystemEventHandler
 
 from .s3_uploader import upload_to_s3
@@ -107,9 +108,21 @@ class VideoHandler(FileSystemEventHandler):
             if not self._wait_for_stable_file(path):
                 continue
 
-            # get the time of the orginal video
-            ts = os.path.getmtime(path)
-            iso_ts = datetime.datetime.fromtimestamp(ts).isoformat()
+            # Extract timestamp from filename
+            filename = os.path.basename(path)
+            timestamp_match = re.search(r'(\d{4}-\d{2}-\d{2})\$(\d{2}-\d{2}-\d{2}-\d{6})', filename)
+            
+            if timestamp_match:
+                date_part = timestamp_match.group(1)
+                time_part = timestamp_match.group(2)
+                # Convert format: 15-45-55-995201 -> 15:45:55.995201
+                time_formatted = time_part[:2] + ':' + time_part[3:5] + ':' + time_part[6:8] + '.' + time_part[9:]
+                iso_ts = f"{date_part}T{time_formatted}"
+            else:
+                # Fallback to file modification time if timestamp not found in filename
+                ts = os.path.getmtime(path)
+                iso_ts = datetime.datetime.fromtimestamp(ts).isoformat()
+            
             video_times.append(iso_ts)
 
             # convert to .mp4
