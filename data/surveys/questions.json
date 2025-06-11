@@ -73,18 +73,6 @@
             ]
         },
         {
-            "text": "How would you rate the quality of your sleep this day?",
-            "options": [
-                "0 (low)",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6 (high)"
-            ]
-        },
-        {
             "text": "How negative or positive was the social interaction you had at that moment?",
             "options": [
                 "no social interaction",
