@@ -5,35 +5,39 @@ import subprocess
 from typing import Optional, Tuple
 
 
+import re
+from typing import Optional, Tuple
+
 def extract_timestamp_from_filename(filename: str) -> Tuple[Optional[str], Optional[str]]:
     """
     Extract timestamp from video filename.
+    Supports two formats:
+      1. YYYY-MM-DD$HH-MM-SS-ffffff
+      2. YYYY-MM-DDTHH-MM-SS (optional -ffffff for microseconds)
     Returns: (iso_timestamp, video_time_HH:MM)
     """
-    timestamp_match = re.search(
-        r"(\d{4}-\d{2}-\d{2})\$(\d{2}-\d{2}-\d{2}-\d{6})", filename
+    m = re.search(
+        r"(?P<date>\d{4}-\d{2}-\d{2})T(?P<time>\d{2}-\d{2}-\d{2})(?:-(?P<micro>\d{1,6}))?",
+        filename
     )
-    
-    if timestamp_match:
-        date_part = timestamp_match.group(1)
-        time_part = timestamp_match.group(2)
-        
-        # Convert format: 15-45-55-995201 -> 15:45:55.995201
-        time_formatted = (
-            time_part[:2]
-            + ":"
-            + time_part[3:5]
-            + ":"
-            + time_part[6:8]
-            + "."
-            + time_part[9:]
-        )
-        iso_ts = f"{date_part}T{time_formatted}"
-        video_time = time_part[:2] + ":" + time_part[3:5]
-        
+    if m:
+        date_part = m.group("date")
+        hh, mm, ss = m.group("time").split("-")
+        micro = (m.group("micro") or "0").ljust(6, "0")
+        iso_ts = f"{date_part}T{hh}:{mm}:{ss}.{micro}"
+        video_time = f"{hh}:{mm}"
         return iso_ts, video_time
     
+    m = re.search(r"(\d{4}-\d{2}-\d{2})\$(\d{2}-\d{2}-\d{2})-(\d{6})", filename)
+    if m:
+        date_part, time_part, micro = m.group(1), m.group(2), m.group(3)
+        hh, mm, ss = time_part.split("-")
+        iso_ts = f"{date_part}T{hh}:{mm}:{ss}.{micro}"
+        video_time = f"{hh}:{mm}"
+        return iso_ts, video_time
+
     return None, None
+
 
 
 def get_fallback_timestamp(path: str) -> str:

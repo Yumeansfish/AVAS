@@ -21,17 +21,29 @@ def load_survey_mapping() -> Dict:
     return survey_mapping
 
 
-def get_survey_for_time(video_time: str, survey_mapping: Dict) -> str:
-    """Return the selected survey file based on video time."""
-    time_points = survey_mapping.get('time_points', [])
-    selected_survey = survey_mapping.get('default_survey', 'questions.json')
+from datetime import datetime
+from typing import Dict, Optional
+
+def get_survey_for_time(video_time: str, survey_mapping: Dict) -> Optional[str]:
+    """
+    Return the selected survey file based on video time and explicit intervals.
+    Expects survey_mapping to have an 'intervals' list like:
+      [
+        {"start":"00:00","end":"09:00","survey_file":"questions.json"},
+        {"start":"09:00","end":"11:00","survey_file":"test09.json"},
+        …
+      ]
+    """
+    intervals = survey_mapping.get("intervals", [])
+    vt = datetime.strptime(video_time, "%H:%M").time()
     
-    for point in sorted(time_points, key=lambda x: x['time'], reverse=True):
-        if point['time'] <= video_time:
-            selected_survey = point.get('survey_file', 'questions.json')
-            break
-    
-    return selected_survey
+    for iv in intervals:
+        start = datetime.strptime(iv["start"], "%H:%M").time()
+        end   = datetime.strptime(iv["end"],   "%H:%M").time()
+        if start <= vt < end:
+            return iv.get("survey_file")
+    return None
+
 
 
 def load_survey_data(survey_file: str) -> Dict:
