@@ -88,12 +88,12 @@ class VideoHandler(FileSystemEventHandler):
         3. Calls call_appscript_batch() with video metadata to get a page URL.
         4. Sends notifications (notify_batch) and invokes the callback.
         """
+        # reset timer and drain queue atomically
         with self._lock:
             self._timer = None
-
-        items = []
-        while not self._queue.empty():
-            items.append(self._queue.get())
+            items = []
+            while not self._queue.empty():
+                items.append(self._queue.get())
 
         if not items:
             return
@@ -129,12 +129,8 @@ class VideoHandler(FileSystemEventHandler):
                 dt = datetime.datetime.fromisoformat(iso_ts)
                 video_time = dt.strftime("%H:%M")
                 print(f"Extracted video_time from fallback: {video_time}")
-                survey_file = get_survey_for_time(video_time, survey_mapping)
-                print(f"Selected survey file: {survey_file}")
-            else:
-                survey_file = get_survey_for_time(video_time, survey_mapping)
-                print(f"Selected survey file: {survey_file}")
-            
+            survey_file = get_survey_for_time(video_time, survey_mapping)
+            print(f"Selected survey file: {survey_file}")
             print("=============================\n")
 
             video_times.append(iso_ts)
@@ -152,9 +148,16 @@ class VideoHandler(FileSystemEventHandler):
             survey_data_list.append(video_survey_data)
 
             # Convert and upload
+            # pre-mark the target .mp4 to skip its creation event
+            base, _ = os.path.splitext(path)
+            expected_mp4 = base + ".mp4"
+            with self._lock:
+                self._skip.add(expected_mp4)
+
             mp4_path, should_skip = convert_to_mp4(path)
             if should_skip:
-                self._skip.add(mp4_path)
+                with self._lock:
+                    self._skip.add(mp4_path)
 
             video_url = process_and_upload_video(mp4_path)
             if not video_url:
