@@ -20,6 +20,7 @@ def call_appscript(
         video_names = [video_name],
         video_urls = [video_url],
         video_times = [],
+        video_end_times = [],  # Add empty list for single video
         survey_data_list = [survey_data]
     )
 
@@ -28,7 +29,8 @@ def call_appscript_batch(
     video_names: List[str],
     video_urls: List[str],
     video_times: List[str],
-    survey_data_list: List[dict]  
+    video_end_times: List[str],  # Add new parameter
+    survey_data_list: List[dict]
 ) -> Optional[str]:
     """
     call the appscript to generate the pages
@@ -37,7 +39,8 @@ def call_appscript_batch(
     video_names (List[str]): List of the video file names
     video_urls (List[str]): List of Amazon S3 links for each video
     video_times (List[str]): List of ISO timestamps for each video
-    survey_data_list (List[dict]): List of survey JSONs, one for each video  
+    video_end_times (List[str]): List of ISO end timestamps for each video
+    survey_data_list (List[dict]): List of survey JSONs, one for each video
     output:
     Optional[str]: The generated page URL, or None on failure.
     """
@@ -46,7 +49,8 @@ def call_appscript_batch(
         "videoNames": video_names,
         "videoUrls": video_urls,
         "videoTimes": video_times,
-        "surveyJsonList": survey_data_list,  
+        "videoEndTimes": video_end_times,  # Add to payload
+        "surveyJsonList": survey_data_list,
         "sheetId": SHEET_ID,
         "awsAccessKey": AWS_ACCESS_KEY_ID,
         "awsSecretKey": AWS_SECRET_ACCESS_KEY,

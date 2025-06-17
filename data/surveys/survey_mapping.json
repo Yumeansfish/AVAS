@@ -1,0 +1,25 @@
+{
+  "time_points": [
+    {
+      "time": "09:00",
+      "survey_file": "test09.json"
+    },
+    {
+      "time": "11:00",
+      "survey_file": "test11.json"
+    },
+    {
+      "time": "15:00",
+      "survey_file": "test15.json"
+    },
+    {
+      "time": "17:00",
+      "survey_file": "test17.json"
+    },
+    {
+      "time": "20:00",
+      "survey_file": "questions.json"
+    }
+  ],
+  "default_survey": "questions.json"
+}

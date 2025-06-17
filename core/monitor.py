@@ -2,7 +2,7 @@ import os
 import time
 import threading
 from watchdog.observers import Observer
-from .handler import VideoHandler
+from .video_handler import VideoHandler
 
 class MonitorCore:
     def __init__(self):
