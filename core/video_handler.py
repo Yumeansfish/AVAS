@@ -11,11 +11,7 @@ from .video_metadata import (
     get_video_duration,
     calculate_end_time
 )
-from .survey_loader import (
-    load_survey_mapping,
-    get_survey_for_time,
-    load_survey_data
-)
+from .survey_loader import load_survey_data
 from .video_processor import convert_to_mp4, process_and_upload_video
 from .appscript_client import call_appscript_batch
 from .notifier import notify_batch
@@ -97,13 +93,10 @@ class VideoHandler(FileSystemEventHandler):
 
         if not items:
             return
-
-        # Load survey mapping
-        survey_mapping = load_survey_mapping()
-        print(f"\n=== Survey Mapping Loaded ===")
-        print(f"Mapping content: {survey_mapping}")
-        print("=============================\n")
-
+        
+        
+        
+        
         video_names = []
         video_urls = []
         video_times = []
@@ -129,8 +122,6 @@ class VideoHandler(FileSystemEventHandler):
                 dt = datetime.datetime.fromisoformat(iso_ts)
                 video_time = dt.strftime("%H:%M")
                 print(f"Extracted video_time from fallback: {video_time}")
-            survey_file = get_survey_for_time(video_time, survey_mapping)
-            print(f"Selected survey file: {survey_file}")
             print("=============================\n")
 
             video_times.append(iso_ts)
@@ -143,7 +134,7 @@ class VideoHandler(FileSystemEventHandler):
             video_end_times.append(end_time)
 
             # Load survey data
-            video_survey_data = load_survey_data(survey_file)
+            video_survey_data = load_survey_data()
             print(f"Loaded survey data: {video_survey_data}")
             survey_data_list.append(video_survey_data)
 
