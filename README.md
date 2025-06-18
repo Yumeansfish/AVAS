@@ -45,48 +45,47 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 - click sign up and finish the signing up
 
 - S3 part
-- sign in and search S3
-- create a new bucket
-- go to permission of the bucket
-- to make sure appscript can get the link of the video
-- Paste the following into Bucket policy:
+- Search S3
+- Click "create bucket"
+- Unselect "block all public access"
+- Other setting can use the default setting
+- After create the bucket
+- Click "Permissions"
+- In the "Bucket policy" part, click "edit"
+- Paste the following code in it (replace "your_bucket_name" with your real bucket name)
+- Save changes
+- 
 ```
   {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "AllowPublicReadGetObject",
+            "Sid": "PublicReadGetObject",
             "Effect": "Allow",
             "Principal": "*",
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::avas/*"
+            "Resource": "arn:aws:s3:::your_bucket_name/*"
         }
     ]
 }
 ```
 
 - IAM part
-- search IAM
-- create a new user
-- finish the strategy settings to make sure python can upload videos
-- a example can be :
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:PutObject",
-        "s3:PutObjectAcl"     
-      ],
-      "Resource": "arn:aws:s3:::avas/*"
-    }
-  ]
-}
-```
-- dowload the .csv which contains the access key and secret key
+- Search IAM
+- Click "users"
+- Click "create user"
+- In step2 "Permissions options"
+- Choose "Attach polices directly"
+- Then search "AmazonS3FullAccess" in "Permission policies"
+- select "AmazonSeFullAccess"
+- In Step3 ,Click "create user"
 
+- Return back to user page and click the user you created just now
+- You can find in "Summary" has a "Access key" part
+- Click "create Access key"
+- In step1: choose "Local code."
+- You can skip step2
+- In step3: dowload .csv to store your own access key and secret key
 
 ## Installation & Configuration
 - The basic steps includes:
