@@ -9,11 +9,24 @@ from typing import Optional, Tuple
 def extract_timestamp_from_filename(filename: str) -> Tuple[Optional[str], Optional[str]]:
     """
     Extract timestamp from video filename.
-    Supports two formats:
-      1. YYYY-MM-DD$HH-MM-SS-ffffff
-      2. YYYY-MM-DDTHH-MM-SS (optional -ffffff for microseconds)
+    Supports two formats (priority order):
+    1. YYYY-MM-DD$HH-MM-SS-ffffff (standard format)
+    2. YYYY-MM-DDTHH-MM-SS (optional -ffffff for microseconds)
     Returns: (iso_timestamp, video_time_HH:MM)
     """
+    # Priority 1: standard format - YYYY-MM-DD$HH-MM-SS-ffffff
+    m = re.search(r"(\d{4}-\d{2}-\d{2})\$(\d{2}-\d{2}-\d{2}-\d{6})", filename)
+    if m:
+        date_part = m.group(1)
+        time_part = m.group(2)  # HH-MM-SS-ffffff
+        # Convert format: 15-45-55-995201 -> 15:45:55.995201
+        hh, mm, ss_micro = time_part[:2], time_part[3:5], time_part[6:]
+        ss, micro = ss_micro[:2], ss_micro[3:]  # Split SS-ffffff
+        iso_ts = f"{date_part}T{hh}:{mm}:{ss}.{micro}"
+        video_time = f"{hh}:{mm}"
+        return iso_ts, video_time
+    
+    # Priority 2: T format - YYYY-MM-DDTHH-MM-SS(-ffffff)
     m = re.search(
         r"(?P<date>\d{4}-\d{2}-\d{2})T(?P<time>\d{2}-\d{2}-\d{2})(?:-(?P<micro>\d{1,6}))?",
         filename
@@ -26,14 +39,6 @@ def extract_timestamp_from_filename(filename: str) -> Tuple[Optional[str], Optio
         video_time = f"{hh}:{mm}"
         return iso_ts, video_time
     
-    m = re.search(r"(\d{4}-\d{2}-\d{2})\$(\d{2}-\d{2}-\d{2})-(\d{6})", filename)
-    if m:
-        date_part, time_part, micro = m.group(1), m.group(2), m.group(3)
-        hh, mm, ss = time_part.split("-")
-        iso_ts = f"{date_part}T{hh}:{mm}:{ss}.{micro}"
-        video_time = f"{hh}:{mm}"
-        return iso_ts, video_time
-
     return None, None
 
 
@@ -62,7 +67,7 @@ def calculate_end_time(iso_timestamp: str, duration_seconds: Optional[float]) ->
     """Calculate video end time based on start time and duration."""
     start_dt = datetime.datetime.fromisoformat(iso_timestamp)
     
-    if duration_seconds:
+    if duration_seconds is not None:
         end_dt = start_dt + datetime.timedelta(seconds=duration_seconds)
     else:
         # Default to 1 minute if duration unavailable

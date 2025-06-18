@@ -147,7 +147,7 @@ aw-webui % npm run build
 ```
 - then apply the new dist to the activitywatch:
 ```
-cp -r /home/trustme/aw-webui/dist/. /home/trustme/activitywatch/aw-server/aw_server/static/
+cp -r /home/trustme/aw-webui/dist/. /home/trustme/activitywatch/aw-server/static/  ########guess previous mistake is here
 //check whether it's the right path in computer
 pkill -f activitywatch 
 /home/trustme/activitywatch/aw-server/aw-server &   //restart
@@ -160,27 +160,32 @@ pkill -f activitywatch
 
 ## Directory Structure
 ```text
-<repository_root>/
 ├── core/
 │   ├── __init__.py
 │   ├── appscript_client.py
 │   ├── config.py
-│   ├── handler.py
 │   ├── main.py
 │   ├── monitor.py
 │   ├── notifier.py
-│   └── s3_uploader.py
+│   ├── survey_loader.py
+│   ├── video_handler.py
+│   ├── video_metadata.py
+│   └── video_processor.py
 ├── data/
-│   └── … 
-├── gui/
-│   ├── __init__.py
-│   ├── monitor_gui.py
-│   └── survey_gui.py
-├── .gitignore
-├── client_secret.json
-├── credentials.json
-├── token.json
-└── README.md
+│   ├── surveys/
+│   └── video/
+├── dist/
+│   ├── css/
+│   ├── fonts/
+│   ├── js/
+│   ├── index.html
+│   ├── manifest.json
+│   ├── service-worker.js
+│   └── workbox-6567b62a.js
+├── init_aw_webui.py
+├── init_env.py
+├── README.md
+└── requirements.txt
 ```
 
 

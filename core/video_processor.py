@@ -1,9 +1,9 @@
 import os
 import subprocess
 from typing import Optional, Tuple
-
-from .s3_uploader import upload_to_s3
 from .config import S3_BUCKET_NAME
+import boto3
+from botocore.exceptions import BotoCoreError, ClientError
 
 
 def convert_to_mp4(video_path: str) -> Tuple[str, bool]:
@@ -40,6 +40,15 @@ def convert_to_mp4(video_path: str) -> Tuple[str, bool]:
         # Return original path if conversion fails
         return video_path, False
 
+_s3 = boto3.client("s3")
+def upload_to_s3(local_path: str) -> Optional[str]:
+    key = os.path.basename(local_path)
+    try:
+        _s3.upload_file(local_path, S3_BUCKET_NAME, key)
+        return key
+    except (BotoCoreError, ClientError) as e:
+        print(f"❌ fail {e}")
+        return None
 
 def process_and_upload_video(video_path: str) -> Optional[str]:
     """
