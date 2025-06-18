@@ -69,7 +69,6 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
     ]
 }
 ```
-
 - IAM part
 - Search IAM
 - Click "users"
@@ -91,20 +90,16 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 - The basic steps includes:
 - 0.sign up in AWS and create bucket(see Amazon S3 sign up and bucket creation)
 - 1.install requirements.txt
-- 2.run init_aw_webui.py 
-- 3.aws configure
-- 4.run init_env.py 
-- in this stage , I divide 1,2,3,4 to test its functionality.
-- when everything can be finished well , they can be merged in one .py file 
+- 2.run init_aw_webui.py(now use mannual moving reaplce this step,see activitywatch)
+- 3.run init_env.py ,set all the sensitive configuration
 
 ```
 git clone <repository_url>
 cd <repository_folder>
-aws configure
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python3 init_aw_webui.py #Do this step in terminal instead of IDE
+python3 init_aw_webui.py #(now use mannual moving reaplce this step,see activitywatch)
 python3 init_env.py #Do this step in terminal instead of IDE
 ```
 - change/set other non-sensitive configuration in config.py
@@ -116,45 +111,13 @@ python3 -m core.main
 - then it will start monitor the target folder automatically
  
 ## ActivityWatch(This part in only for back-up operation when init_aw_webui.py fail)
-- The default ActivityWatch web UI does **not** support parsing URLs to extract specific timestamps. It only supports:
+- find the real path of the static folder of activityWatch
+- an example in linux:
+- /home/trustme/activitywatch/aw-server/aw-server/static/
+- copy all the contents in AVAS/dist and paste in static folder to replace all orginal contents
 
-- Showing the most recent timespan of activity  
-- Jumping to a specific day  
-
-- Therefore, I forked the [aw-webui](https://github.com/Yumeansfish/aw-webui) repository 
-- and added front-end logic to parse `start` and `end` parameters from the URL, 
-- allowing the UI to jump -to an exact time range. 
-- This makes it possible to link videos on the final webpage to their corresponding timeline URLs.
-
-- To implement it,please:
-
-```
-git clone https://github.com/Yumeansfish/aw-webui.git
-```
-- update Node to make sure that npm run build can executed successfully
-- a example installing way :
-```
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-source ~/.bashrc   
-nvm install 23.11.0
-nvm use 23.11.0
-```
-- then:
-```
-aw-webui % npm install
-aw-webui % npm run build
-```
-- then apply the new dist to the activitywatch:
-```
-cp -r /home/trustme/aw-webui/dist/. /home/trustme/activitywatch/aw-server/static/  ########guess previous mistake is here
-//check whether it's the right path in computer
-pkill -f activitywatch 
-/home/trustme/activitywatch/aw-server/aw-server &   //restart
-```
-- after this, use this link to test whether its work :
-- http://localhost:5600/#/timeline?start=2025-05-11T15%3A10%3A00&end=2025-05-11T15%3A30%3A00
-- the left side of the timeline will start from 05-11 15:10
-- the right side of the timeline will end at 05-11 15:30
+## two-step verification of the sender email
+- link :https://myaccount.google.com/signinoptions/twosv?rapt=AEjHL4P36Mfg_YQ5JLfwGiqb6iM2tQaLWa4cKI8fhwGOZJMRha7quAqOc4eH7P3zXSASs-LVrVXeL1bHgEp51hPAgGyzbeWj3trex6zrbrlmi1g_KkAAKLI
 
 
 ## Directory Structure
