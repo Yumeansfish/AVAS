@@ -89,14 +89,20 @@ def restart_activitywatch() -> None:
     """
     system = platform.system()
     if system == 'Windows':
-        # Kill processes
-        subprocess.call(["taskkill", "/F", "/IM", "ActivityWatch.exe"], stderr=subprocess.DEVNULL)
-        subprocess.call(["taskkill", "/F", "/IM", "aw-server.exe"], stderr=subprocess.DEVNULL)
-        # Start client
-        prog = os.environ.get('ProgramFiles', 'C:/Program Files')
-        aw_exec = Path(prog) / 'ActivityWatch' / 'ActivityWatch.exe'
-        if aw_exec.exists():
-            os.startfile(str(aw_exec))
+        subprocess.call(["taskkill", "/F", "/IM", "aw-server.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.call(["taskkill", "/F", "/IM", "ActivityWatch.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        prog_local = os.environ.get('LOCALAPPDATA', os.environ.get('ProgramFiles', r'C:\Program Files'))
+        aw_server = Path(prog_local) / 'Programs' / 'activitywatch' / 'aw-server.exe'
+        if aw_server.exists():
+            subprocess.Popen([str(aw_server)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        aw_client = Path(prog_local) / 'Programs' / 'activitywatch' / 'ActivityWatch.exe'
+        if aw_client.exists():
+            subprocess.Popen([str(aw_client)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        print("🔁 ActivityWatch (Windows) 已重启。")
+
     else:
         # Kill any running ActivityWatch processes
         subprocess.call(["pkill", "-f", "activitywatch"], stderr=subprocess.DEVNULL)
