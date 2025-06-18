@@ -85,6 +85,7 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 - In step1: choose "Local code."
 - You can skip step2
 - In step3: dowload .csv to store your own access key and secret key
+- **The secret key will only show once in Step3! So don't click so fast without dowload the .csv**
 
 ## Installation & Configuration
 - The basic steps includes:
