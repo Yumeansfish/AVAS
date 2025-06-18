@@ -49,7 +49,7 @@ The Video Handler module listens for new video files (`.mov`, `.avi`, `.mp4`) in
 - create a new bucket
 - go to permission of the bucket
 - to make sure appscript can get the link of the video
-- finish the storing strategy of the bucket,a example can be:
+- Paste the following into Bucket policy:
 ```
   {
     "Version": "2012-10-17",
