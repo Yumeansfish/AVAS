@@ -11,7 +11,7 @@ all the videos enters in this interval will be recorded
 after the timer finished, they will be handled together
 """
 #BTACH_INTERVAL setting
-BATCH_INTERVAL = int(os.environ.get("BATCH_INTERVAL", 10))
+BATCH_INTERVAL = int(os.environ.get("BATCH_INTERVAL", 100))
 
 #AWS setting
 AWS_ACCESS_KEY_ID     = os.environ.get("AWS_ACCESS_KEY_ID", "")
