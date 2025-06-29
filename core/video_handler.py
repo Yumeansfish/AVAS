@@ -186,20 +186,6 @@ class VideoHandler(FileSystemEventHandler):
             self.callback(video_names, [page_url])
         except TypeError:
             pass
-        
-        # Clean up converted MP4 files after successful batch processing
-        converted_files_to_delete = []
-        for path in self._skip:
-            if os.path.exists(path) and path.endswith('.mp4'):
-                converted_files_to_delete.append(path)
-                
-        for file_path in converted_files_to_delete:
-            try:
-                os.remove(file_path)
-            except Exception as e:
-                print(f"Failed to delete {file_path}: {e}")
-        # Clear the skip set after cleanup
-        self._skip.clear()
 
     def _wait_for_stable_file(self, path):
         """
