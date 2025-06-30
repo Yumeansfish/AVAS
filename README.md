@@ -84,7 +84,7 @@ python3 -m core.main
 ```
 - then it will start monitor the target folder automatically
  
-## ActivityWatch(This part in only for back-up operation when init_aw_webui.py fail)
+## ActivityWatch
 - find the real path of the static folder of activityWatch
 - an example in linux:
 - /home/trustme/activitywatch/aw-server/aw-server/static/
