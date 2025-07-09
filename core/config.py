@@ -11,7 +11,7 @@ all the videos enters in this interval will be recorded
 after the timer finished, they will be handled together
 """
 #BTACH_INTERVAL setting
-BATCH_INTERVAL = int(os.environ.get("BATCH_INTERVAL", 100))
+BATCH_INTERVAL = int(os.environ.get("BATCH_INTERVAL", 10))
 
 #AWS setting
 AWS_ACCESS_KEY_ID     = os.environ.get("AWS_ACCESS_KEY_ID", "")
@@ -40,7 +40,7 @@ SURVEY_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
 # Apps Script URL
 SCRIPT_URL = (
     "https://script.google.com/macros/s/"
-    "AKfycbyE530U1GQngdQtxgEC0PwgXw7BNhM5n1VKD5NRNSsfwrDiJ9BcIiFQxtX9WnEXlXeepA/exec"
+    "AKfycbxsDg2qwVqcCny1fgIOdlqPqxikOhLE4HkSSgBjoelKz67-h9LAedAqLvU6aXbZA3UnNA/exec"
 )
 
 # ─── Google Sheet setting ───
