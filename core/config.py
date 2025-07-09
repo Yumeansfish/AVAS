@@ -40,7 +40,7 @@ SURVEY_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
 # Apps Script URL
 SCRIPT_URL = (
     "https://script.google.com/macros/s/"
-    "AKfycbxsDg2qwVqcCny1fgIOdlqPqxikOhLE4HkSSgBjoelKz67-h9LAedAqLvU6aXbZA3UnNA/exec"
+    "AKfycbylfwlEODbzqq7JKjSoupACf6JBlJthXDyySvryTUpPfj8xbdDSztuNPMzX5_jA7NsR6A/exec"
 )
 
 # ─── Google Sheet setting ───
@@ -55,6 +55,13 @@ SMTP_PASSWORD   = os.environ.get("SMTP_PASSWORD", "")
 FROM_EMAIL      = os.environ.get("FROM_EMAIL", "")
 
 
+# ─── survey reminder setting ───
+REMINDER_CHECK_HOUR = int(os.environ.get("REMINDER_CHECK_HOUR", "8"))
+REMINDER_CHECK_MINUTE = int(os.environ.get("REMINDER_CHECK_MINUTE", "0"))
+
+# ─── notification time setting ───
+NOTIFICATION_HOUR = int(os.environ.get("NOTIFICATION_HOUR", "14"))
+NOTIFICATION_MINUTE = int(os.environ.get("NOTIFICATION_MINUTE", "12"))
 
 
 

@@ -16,7 +16,7 @@ from .survey_loader import load_survey_data
 from .video_processor import convert_to_mp4, process_and_upload_video
 from .appscript_client import call_appscript_batch
 from .notifier import notify_batch
-from .config import BATCH_INTERVAL
+from .config import BATCH_INTERVAL, NOTIFICATION_HOUR, NOTIFICATION_MINUTE
 from .reminder import add_survey_to_track
 
 
@@ -64,7 +64,7 @@ class VideoHandler(FileSystemEventHandler):
             now = datetime.datetime.now()
             
             # Check if it's 5:00 PM (17:00)
-            if now.hour == 1 and now.minute == 59:
+            if now.hour == NOTIFICATION_HOUR and now.minute == NOTIFICATION_MINUTE:
                 self._send_pending_notifications()
                 # Sleep for 60 seconds to avoid sending multiple times in the same minute
                 time.sleep(60)

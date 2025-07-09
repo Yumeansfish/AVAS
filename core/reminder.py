@@ -7,14 +7,14 @@ import requests
 from pathlib import Path
 from typing import List, Dict, Optional
 
-from .config import PROJECT_ROOT, RECIPIENT_EMAIL
 from .notifier import send_notification_email
+from .config import PROJECT_ROOT, RECIPIENT_EMAIL, REMINDER_CHECK_HOUR, REMINDER_CHECK_MINUTE
 
 
 class SurveyReminder:
     """Handle survey completion checking and reminder notifications."""
     
-    def __init__(self, check_hour: int = 8, check_minute: int = 0):
+    def __init__(self, check_hour: int, check_minute: int):
         """
         Initialize the survey reminder.
         
@@ -223,8 +223,7 @@ def get_reminder() -> SurveyReminder:
     """Get or create the global reminder instance."""
     global _reminder_instance
     if _reminder_instance is None:
-        # Check time - CHANGE THIS LINE TO SET REMINDER TIME
-        _reminder_instance = SurveyReminder(check_hour=2, check_minute=0)
+        _reminder_instance = SurveyReminder(check_hour=REMINDER_CHECK_HOUR, check_minute=REMINDER_CHECK_MINUTE)
     return _reminder_instance
 
 
