@@ -20,12 +20,7 @@ AWS_REGION            = os.environ.get("AWS_REGION", "eu-north-1")
 S3_BUCKET_NAME        = os.environ.get("S3_BUCKET_NAME", "")
             
 #target folder setting
-WATCH_DIR = Path(
-    os.environ.get(
-        "WATCH_DIR",
-        PROJECT_ROOT / "data" / "video"
-    )
-)
+WATCH_DIR = Path(f"{PROJECT_ROOT.parent}/highlights")
 WATCH_DIR.mkdir(parents=True, exist_ok=True)
 
 # survey JSON setting
