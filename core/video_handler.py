@@ -15,8 +15,8 @@ from .video_metadata import (
 from .survey_loader import load_survey_data
 from .video_processor import convert_to_mp4, process_and_upload_video
 from .appscript_client import call_appscript_batch
-from .notifier import notify_batch
-from .config import BATCH_INTERVAL, NOTIFICATION_HOUR, NOTIFICATION_MINUTE
+from .notifier import notify_batch  
+from .config import BATCH_INTERVAL
 from .reminder import add_survey_to_track
 
 
@@ -26,7 +26,7 @@ class VideoHandler(FileSystemEventHandler):
     2. Converts non-.mp4 files to .mp4 via ffmpeg.
     3. Uploads the resulting files to S3.
     4. Calls an App Script to generate a page URL.
-    5. Stores processed videos for scheduled notification at 5:00 PM daily.
+    5. Sends immediate notification email after processing.
     """
 
     def __init__(
@@ -44,55 +44,6 @@ class VideoHandler(FileSystemEventHandler):
         self._queue = queue.Queue()
         self._timer = None
         self._lock = threading.Lock()
-        
-        # Storage for pending notifications
-        self._pending_notifications = []
-        self._notification_lock = threading.Lock()
-        
-        # Start the daily notification scheduler
-        self._start_notification_scheduler()
-
-    def _start_notification_scheduler(self):
-        """Start a thread that checks for 5:00 PM daily."""
-        scheduler_thread = threading.Thread(target=self._notification_scheduler, daemon=True)
-        scheduler_thread.start()
-        print("Started daily notification scheduler for 5:00 PM")
-
-    def _notification_scheduler(self):
-        """Check every minute if it's 5:00 PM and send pending notifications."""
-        while True:
-            now = datetime.datetime.now()
-            
-            # Check if it's 5:00 PM (17:00)
-            if now.hour == NOTIFICATION_HOUR and now.minute == NOTIFICATION_MINUTE:
-                self._send_pending_notifications()
-                # Sleep for 60 seconds to avoid sending multiple times in the same minute
-                time.sleep(60)
-            else:
-                # Check every 30 seconds
-                time.sleep(30)
-
-    def _send_pending_notifications(self):
-        """Send all pending notifications."""
-        with self._notification_lock:
-            if not self._pending_notifications:
-                return
-            
-            # Collect all pending videos
-            all_video_names = []
-            all_video_urls = []
-            
-            for item in self._pending_notifications:
-                all_video_names.extend(item['video_names'])
-                all_video_urls.extend(item['video_urls'])
-            
-            # Clear pending notifications
-            self._pending_notifications = []
-        
-        # Send the batch notification
-        if all_video_names:
-            notify_batch(all_video_names, all_video_urls)
-            print(f"Sent daily notification for {len(all_video_names)} videos at {datetime.datetime.now()}")
 
     def on_created(self, event):
         """
@@ -133,7 +84,7 @@ class VideoHandler(FileSystemEventHandler):
            c. Converts to .mp4 (marking the new .mp4 in self._skip).
            d. Uploads the .mp4 to S3 via upload_to_s3().
         3. Calls call_appscript_batch() with video metadata to get a page URL.
-        4. Stores video info for scheduled notification at 5:00 PM.
+        4. Sends immediate notification email.
         """
         # reset timer and drain queue atomically
         with self._lock:
@@ -228,14 +179,12 @@ class VideoHandler(FileSystemEventHandler):
             or video_urls[0]
         )
 
-        # Store notification data for 5:00 PM delivery
-        with self._notification_lock:
-            self._pending_notifications.append({
-                'video_names': video_names,
-                'video_urls': [page_url],
-                'timestamp': datetime.datetime.now()
-            })
-            print(f"Stored {len(video_names)} videos for 5:00 PM notification")
+        # Send immediate notification
+        try:
+            notify_batch(video_names, [page_url])
+            print(f"Sent immediate notification for {len(video_names)} videos at {datetime.datetime.now()}")
+        except Exception as e:
+            print(f"Failed to send notification: {e}")
         
         # Add surveys to reminder tracker
         for video_name in video_names:

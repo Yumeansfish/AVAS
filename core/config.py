@@ -56,12 +56,9 @@ FROM_EMAIL      = os.environ.get("FROM_EMAIL", "")
 
 
 # ─── survey reminder setting ───
-REMINDER_CHECK_HOUR = int(os.environ.get("REMINDER_CHECK_HOUR", "8"))
-REMINDER_CHECK_MINUTE = int(os.environ.get("REMINDER_CHECK_MINUTE", "0"))
+REMINDER_CHECK_HOUR = int(os.environ.get("REMINDER_CHECK_HOUR", "13"))
+REMINDER_CHECK_MINUTE = int(os.environ.get("REMINDER_CHECK_MINUTE", "14"))
 
-# ─── notification time setting ───
-NOTIFICATION_HOUR = int(os.environ.get("NOTIFICATION_HOUR", "14"))
-NOTIFICATION_MINUTE = int(os.environ.get("NOTIFICATION_MINUTE", "12"))
 
 
 
