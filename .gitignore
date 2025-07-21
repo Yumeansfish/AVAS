@@ -1,7 +1,9 @@
 client_secret.json
 credentials.json
 token.json
-*/__pycache__
+__pycache__/
+*/__pycache__/
+**/__pycache__/
 venv/
 .pytest_cache/
 .env
