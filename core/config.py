@@ -35,7 +35,7 @@ SURVEY_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
 # Apps Script URL
 SCRIPT_URL = (
     "https://script.google.com/macros/s/"
-    "AKfycbylfwlEODbzqq7JKjSoupACf6JBlJthXDyySvryTUpPfj8xbdDSztuNPMzX5_jA7NsR6A/exec"
+    "AKfycbxKbuS1CGC6kGLPJqkPqsjWQGnOV4k_6dTN7Og5SBvoD77PwUN1XIjJ-dvy4bPExblbHw/exec"
 )
 
 # ─── Google Sheet setting ───
